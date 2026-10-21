@@ -156,6 +156,8 @@ assert "highlightRanges(x.word,x.word_highlights)" in html
 assert "highlightRanges(x.reading,x.reading_highlights)" in html
 assert ".reading-focus{color:var(--orange);font-weight:700}" in html
 assert ".reading-linked-examples{" in html
+assert "grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)" in html
+assert ".reading-example-main>span{min-width:0;overflow-wrap:anywhere}" in html
 assert "@media(max-width:720px){.reading-sections{grid-template-columns:1fr}" in html
 assert all(f'data-rate="{rating}"' in html for rating in ("again", "hard", "good"))
 assert "function navigateLibraryCard(step)" in html
