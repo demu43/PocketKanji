@@ -91,7 +91,12 @@ for card in cards:
         actual_examples.append((example["kind"], example["reading_kana"]))
         advanced_count += int(example["advanced"])
     assert set(actual_examples) == expected_examples, f"Copertura esempi errata: {card['id']}"
-    assert len(actual_examples) == len(expected_examples), f"Esempio duplicato: {card['id']}"
+    assert len(actual_examples) >= len(expected_examples), f"Esempio mancante: {card['id']}"
+    identities = [
+        (example["kind"], example["reading_kana"], example["word"], example["reading"])
+        for example in examples
+    ]
+    assert len(identities) == len(set(identities)), f"Esempio duplicato: {card['id']}"
     example_count += len(examples)
 
 day = next(card for card in cards if card["kanji"] == "日")
@@ -120,6 +125,17 @@ assert third_day["reading_highlights"] == [[2, 3]]
 skilled = next(card for card in cards if card["kanji"] == "上")
 skilled_example = next(item for item in skilled["reading_examples"] if item["word"] == "上手")
 assert "word_highlights" not in skilled_example, "Un ruby di gruppo ambiguo non deve essere suddiviso"
+
+one = next(card for card in cards if card["kanji"] == "一")
+assert one["kun_readings"] == [{"kana": "ひと", "romaji": "hito"}]
+one_kun = next(item for item in one["reading_examples"] if item["kind"] == "kun")
+assert (one_kun["word"], one_kun["reading"], one_kun["reading_kana"]) == ("一つ", "ひとつ", "ひと")
+assert one_kun["reading_highlights"] == [[0, 2]]
+
+food = next(card for card in cards if card["kanji"] == "食")
+assert food["kun_readings"] == [{"kana": "た", "romaji": "ta"}]
+food_kun = next(item for item in food["reading_examples"] if item["kind"] == "kun")
+assert (food_kun["word"], food_kun["reading"], food_kun["reading_kana"]) == ("食べる", "たべる", "た")
 
 assert "pocketkanji.prototype.v1" in html
 assert FONT_PATH.exists() and FONT_PATH.stat().st_size > 1_000_000, "Font Noto Sans JP assente o incompleto"
