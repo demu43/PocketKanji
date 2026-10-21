@@ -166,6 +166,10 @@ assert "const speechAvailable=()=>window.speechSynthesis" in html
 assert "utterance.lang='ja-JP'" in html
 assert "utterance.rate=.9" in html
 assert "utterance.pitch=1.05" in html
+assert "utterance.volume=1" in html
+assert "speakingUtterance=utterance" in html
+assert "window.speechSynthesis.resume()" in html
+assert "setTimeout(()=>" in html
 assert "function selectedJapaneseVoice()" in html
 assert "function populateVoiceSelect()" in html
 assert "Automatica · consigliata" in html
