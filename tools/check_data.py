@@ -194,6 +194,8 @@ assert "v.settings.theme==='dark'?'dark':'light'" in html
 assert "function applyTheme()" in html
 assert "data-action=\"theme-toggle\"" in html
 assert "html[data-theme='dark']" in html
+assert ":root{--orange:#2f7f78}" in html
+assert "html[data-theme='dark']{--orange:#72c7bd}" in html
 assert "const MUST_N5_CHARS=" in html
 assert "function renderMustN5()" in html
 assert "['mustn5','MUST N5']" in html
