@@ -16,6 +16,13 @@ def normalize_reading(value):
     return re.sub(r"[.\-・\s]", "", value)
 
 
+def displayed_reading(value, kind):
+    """Keep okurigana out of the displayed kun reading."""
+    if kind == "kun":
+        value = value.split(".", 1)[0]
+    return normalize_reading(value)
+
+
 def reading_kind(value):
     if re.search(r"[\u30a0-\u30ff]", value):
         return "on"
@@ -129,7 +136,7 @@ def make_reading_items(card, kanjidic):
     )
     for value in source_values:
         kind = reading_kind(value)
-        display = normalize_reading(value)
+        display = displayed_reading(value, kind)
         if display not in grouped[kind]:
             grouped[kind].append(display)
 
@@ -146,18 +153,16 @@ def make_reading_items(card, kanjidic):
         raise ValueError(f"Kanji non trovato in KANJIDIC2: {card['kanji']}")
 
     items = {"kun": [], "on": []}
-    reference_normalized = normalize_reading(card["reference_reading_kana"])
+    reference_kind = reading_kind(card["reference_reading_kana"])
+    reference_normalized = displayed_reading(card["reference_reading_kana"], reference_kind)
     for kind in ("kun", "on"):
-        accepted = {normalize_reading(value) for value in dictionary_entry[kind]}
+        accepted = {displayed_reading(value, kind) for value in dictionary_entry[kind]}
         for value in grouped[kind]:
             if normalize_reading(value) not in accepted:
                 raise ValueError(
                     f"Lettura non verificata per {card['kanji']}: {kind} {value}"
                 )
-            if value == reference_normalized:
-                romaji = card["reference_reading_romaji"]
-            else:
-                romaji = kana_to_romaji(value, kind)
+            romaji = kana_to_romaji(value, kind)
             items[kind].append({"kana": value, "romaji": romaji})
     return items
 
