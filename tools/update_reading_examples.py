@@ -73,6 +73,12 @@ def normalize_reading(value: str) -> str:
     return re.sub(r"[.\-・\s]", "", value)
 
 
+def displayed_reading(value: str, kind: str) -> str:
+    if kind == "kun":
+        value = value.split(".", 1)[0]
+    return normalize_reading(value)
+
+
 def priority_score(tags: set[str]) -> int:
     score = 0
     weights = {
@@ -277,6 +283,10 @@ def candidate_score(candidate: dict, target: str, used_words: set[str], preferre
 
 
 MANUAL = {
+    ("一", "kun", "ひと"): {
+        "word": "一つ", "reading": "ひとつ", "meaning_en": "One thing",
+        "advanced": False,
+    },
     ("日", "kun", "ひ"): {
         "word": "日", "reading": "ひ", "meaning_en": "Day", "advanced": False,
     },
@@ -483,8 +493,10 @@ def choose_examples(
     for card in cards:
         examples = []
         used_words: set[str] = set()
-        reference_normalized = normalize_reading(card["reference_reading_kana"])
         reference_kind = card.get("reference_reading_type")
+        reference_normalized = displayed_reading(
+            card["reference_reading_kana"], reference_kind
+        )
         reference_word = card["reference_word"]
         reference_reading = kata_to_hira(card["reference_word_reading_kana"])
         reference_meta = lexical.get((reference_word, reference_reading), {})
@@ -514,7 +526,7 @@ def choose_examples(
                     target = kata_to_hira(normalize_reading(display))
                     pool = []
                     for candidate in candidates.get(card["kanji"], []):
-                        actual = candidate["kun_form"] if kind == "kun" else candidate["segment"]
+                        actual = candidate["segment"]
                         if actual == target:
                             pool.append(candidate)
                     if not pool:
