@@ -1,0 +1,11 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+*.log
+*.zip
+dist/
+kanjidic2.xml.gz
+PocketKanji-errore.txt
+pocketkanji-backup-*.json
+pocketkanji-progressi-*.csv
+pocketkanji-cronologia-*.csv
