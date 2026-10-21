@@ -5,6 +5,8 @@ __pycache__/
 *.zip
 dist/
 kanjidic2.xml.gz
+JMdict*.gz
+JmdictFurigana*.json*
 PocketKanji-errore.txt
 pocketkanji-backup-*.json
 pocketkanji-progressi-*.csv

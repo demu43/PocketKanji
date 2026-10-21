@@ -181,18 +181,12 @@ for card in cards:
         card["meaning_en"] = "day / sun"
     rebuilt = {}
     for key, value in card.items():
-        if key in {"kun_readings", "on_readings", "reading_examples"}:
+        if key in {"kun_readings", "on_readings"}:
             continue
         rebuilt[key] = value
         if key == "reference_reading_romaji":
             rebuilt["kun_readings"] = readings["kun"]
             rebuilt["on_readings"] = readings["on"]
-        if key == "other_readings" and card["kanji"] == "日":
-            rebuilt["reading_examples"] = [
-                {"word": "日", "reading": "ひ", "meaning_en": "Day"},
-                {"word": "日曜日", "reading": "にちようび", "meaning_en": "Sunday"},
-                {"word": "毎日", "reading": "まいにち", "meaning_en": "Every day"},
-            ]
     updated_cards.append(rebuilt)
 
 library_json = json.dumps(updated_cards, ensure_ascii=False, separators=(", ", ": "))

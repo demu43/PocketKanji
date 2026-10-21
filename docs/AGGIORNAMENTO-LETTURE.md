@@ -18,4 +18,6 @@
 2. Avvia `Avvia PocketKanji.cmd`.
 3. Da **Progressi**, importa il backup JSON proveniente dal Mac.
 
-I backup creati prima di questo aggiornamento sono compatibili: le nuove informazioni sulle letture non cambiano gli ID delle carte né lo schema dei progressi.
+I backup creati prima di questo aggiornamento sono compatibili: le nuove informazioni sulle letture e i vocaboli d'esempio non cambiano gli ID delle carte né lo schema dei progressi.
+
+Ogni lettura mostrata possiede ora un vocabolo associato. La lettura completa della parola è in hiragana; una nota discreta segnala gli usi contestuali o le mutazioni fonetiche, mentre `Advanced` identifica gli esempi usati soltanto quando non è disponibile un'alternativa elementare adeguata.

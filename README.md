@@ -9,6 +9,8 @@ L'applicazione è autonoma: HTML, CSS, JavaScript e dati delle carte sono incorp
 - 500 schede in ordine didattico.
 - Letture **Kun'yomi** in hiragana e **On'yomi** in katakana.
 - Romaji sotto ogni lettura, disattivabile dall'interfaccia.
+- Un vocabolo d'esempio verificato per ogni lettura mostrata, con lettura completa in hiragana e traduzione inglese.
+- Indicazioni discrete per vocaboli avanzati e per mutazioni fonetiche o letture contestuali.
 - Layout delle letture affiancato su desktop e impilato su mobile.
 - Sessioni da 10 carte nuove e fino a 20 ripassi dovuti.
 - Progressi, cronologia e impostazioni salvati nel browser.
@@ -81,11 +83,11 @@ tools/                           strumenti di aggiornamento e controllo
 python3 tools/check_data.py
 ```
 
-Il controllo verifica numero e ID delle carte, presenza e formato delle letture, carta `日`, compatibilità del salvataggio e regole responsive essenziali.
+Il controllo verifica numero e ID delle carte, copertura completa degli esempi, formato kana, carta `日`, compatibilità del salvataggio e regole responsive essenziali.
 
 ## Fonti delle letture
 
-La selezione didattica delle letture è stata verificata rispetto a [KANJIDIC2](https://www.edrdg.org/wiki/KANJIDIC_Project.html), progetto EDRDG distribuito con licenza CC BY-SA 4.0. Le letture rare, storiche o riservate ai nomi propri non vengono importate automaticamente nella scheda principale.
+La selezione didattica delle letture è stata verificata rispetto a [KANJIDIC2](https://www.edrdg.org/wiki/KANJIDIC_Project.html). I vocaboli e le traduzioni derivano da [JMdict](https://www.edrdg.org/wiki/Main_Page.html), mentre l'associazione fra kanji e porzione letta usa [JmdictFurigana](https://github.com/Doublevil/JmdictFurigana). Queste risorse sono distribuite secondo CC BY-SA 4.0. Le liste N5 usate come priorità sono criteri didattici, non liste ufficiali del JLPT.
 
 Consulta [docs/ATTRIBUZIONE-DATI.md](docs/ATTRIBUZIONE-DATI.md) per i dettagli.
 
