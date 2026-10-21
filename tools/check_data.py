@@ -191,6 +191,13 @@ assert 'data-scope="mustn5"' in html
 assert "function startSession(scope='all')" in html
 assert "scope==='mustn5'?CARDS.filter" in html
 assert "startSession(b.dataset.scope||'all')" in html
+assert "const RADICAL_FAMILIES=" in html
+assert "function renderRadicals()" in html
+assert "function radicalMember(member)" in html
+assert "page==='radicals'?renderRadicals()" in html
+assert "['radicals','Radicali']" in html
+assert "Radicale di classificazione" in html
+assert "if(p==='radicals')radicalFamily=null" in html
 assert "kind==='on'?kataToHira(r.kana):r.kana" in html
 assert "speakButton(x.reading,`Ascolta ${x.reading}`)" in html
 assert "speakButton(c.example_ja,'Ascolta la frase')" in html
