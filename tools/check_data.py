@@ -178,6 +178,11 @@ assert "Automatica · consigliata" in html
 assert "non userò una voce di un’altra lingua" in html
 assert "data.settings.voiceURI" in html
 assert "Prova la voce" in html
+assert "theme:'light'" in html
+assert "v.settings.theme==='dark'?'dark':'light'" in html
+assert "function applyTheme()" in html
+assert "data-action=\"theme-toggle\"" in html
+assert "html[data-theme='dark']" in html
 assert "kind==='on'?kataToHira(r.kana):r.kana" in html
 assert "speakButton(x.reading,`Ascolta ${x.reading}`)" in html
 assert "speakButton(c.example_ja,'Ascolta la frase')" in html
