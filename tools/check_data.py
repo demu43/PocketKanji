@@ -174,7 +174,8 @@ assert "data.settings.voiceURI" in html
 assert "Prova la voce" in html
 assert "kind==='on'?kataToHira(r.kana):r.kana" in html
 assert "speakButton(x.reading,`Ascolta ${x.reading}`)" in html
-assert "speakButton(c.example_kana,'Ascolta la frase')" in html
+assert "speakButton(c.example_ja,'Ascolta la frase')" in html
+assert "speakButton(c.example_kana,'Ascolta la frase')" not in html
 assert "if(b.dataset.speak!==undefined)" in html
 assert ".speak-btn{" in html
 
