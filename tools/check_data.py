@@ -183,6 +183,10 @@ assert "v.settings.theme==='dark'?'dark':'light'" in html
 assert "function applyTheme()" in html
 assert "data-action=\"theme-toggle\"" in html
 assert "html[data-theme='dark']" in html
+assert "const MUST_N5_CHARS=" in html
+assert "function renderMustN5()" in html
+assert "['mustn5','MUST N5']" in html
+assert "page==='mustn5'?renderMustN5()" in html
 assert "kind==='on'?kataToHira(r.kana):r.kana" in html
 assert "speakButton(x.reading,`Ascolta ${x.reading}`)" in html
 assert "speakButton(c.example_ja,'Ascolta la frase')" in html
