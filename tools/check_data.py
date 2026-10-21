@@ -161,6 +161,15 @@ assert all(f'data-rate="{rating}"' in html for rating in ("again", "hard", "good
 assert "function navigateLibraryCard(step)" in html
 assert "e.key==='ArrowLeft'||e.key==='ArrowRight'" in html
 assert "if(!d.open)d.showModal()" in html
+assert "function speakJapanese(text,button)" in html
+assert "const speechAvailable=()=>window.speechSynthesis" in html
+assert "utterance.lang='ja-JP'" in html
+assert "utterance.rate=.82" in html
+assert "kind==='on'?kataToHira(r.kana):r.kana" in html
+assert "speakButton(x.reading,`Ascolta ${x.reading}`)" in html
+assert "speakButton(c.example_kana,'Ascolta la frase')" in html
+assert "if(b.dataset.speak!==undefined)" in html
+assert ".speak-btn{" in html
 
 print(
     json.dumps(
@@ -183,3 +192,4 @@ print(
         indent=2,
     )
 )
+
