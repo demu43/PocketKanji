@@ -11,6 +11,7 @@ L'applicazione è autonoma: HTML, CSS, JavaScript e dati delle carte sono incorp
 - Romaji sotto ogni lettura, disattivabile dall'interfaccia.
 - Un vocabolo d'esempio verificato per ogni lettura mostrata, con lettura completa in hiragana e traduzione inglese.
 - Evidenziazione del kanji studiato e del segmento fonetico corrispondente mediante intervalli verificati, senza ricerca testuale approssimativa.
+- Riproduzione delle letture kun'yomi e on'yomi, dei vocaboli e delle frasi tramite la voce giapponese del sistema; l'audio usa i kana verificati invece di far interpretare i kanji al sintetizzatore.
 - Indicazioni discrete per vocaboli avanzati e per mutazioni fonetiche o letture contestuali.
 - Kanji principali delle flashcard e della Libreria resi con il font giapponese Noto Sans JP incluso localmente.
 - Layout delle letture affiancato su desktop e impilato su mobile.
@@ -99,3 +100,4 @@ Consulta [docs/ATTRIBUZIONE-DATI.md](docs/ATTRIBUZIONE-DATI.md) per i dettagli.
 ## Sicurezza
 
 I launcher ascoltano esclusivamente sull'indirizzo locale `127.0.0.1`. Non modificare il bind in `0.0.0.0`, perché renderebbe l'app raggiungibile dalla rete locale senza alcuna necessità.
+
