@@ -25,3 +25,5 @@ Aggiornamento richiesto il 21 ottobre 2026:
 - La carta 日 include ひ / か, ニチ / ジツ e gli esempi 日, 日曜日, 毎日.
 - Quiz, intervalli di ripasso, ID delle carte e chiave `localStorage` restano invariati.
 - I backup della versione precedente restano importabili tramite il confronto stabile di ID, ordine e kanji.
+- Gli esempi evidenziano kanji e segmento fonetico soltanto tramite allineamenti verificati; i casi ambigui restano senza evidenziazione.
+- Il kanji principale usa Noto Sans JP incluso localmente, senza SVG o trasformazioni grafiche e senza modifiche a dimensione, colore o posizione.

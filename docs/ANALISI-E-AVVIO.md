@@ -9,13 +9,14 @@ Aggiornamento letture verificato il 21 ottobre 2026: le 500 carte includono ora 
 PocketKanji non è un servizio con backend tradizionale. È una web app statica e locale composta da:
 
 - HTML5, CSS e JavaScript puro, tutti inclusi in `PocketKanji.html`;
+- il font Noto Sans JP incluso localmente nella cartella `assets` per il kanji principale delle flashcard;
 - una libreria JSON incorporata nello stesso file con 500 carte (`pk0001`–`pk0500`);
 - `localStorage` del browser per progressi, cronologia e impostazioni;
 - esportazione e importazione di backup JSON;
 - esportazioni CSV generate nel browser;
 - un piccolo server HTTP in ascolto soltanto su `127.0.0.1`.
 
-Non risultano framework, package manager, servizi cloud, database, API remote, font remoti o altre risorse Internet.
+Non risultano framework, package manager, servizi cloud, database, API remote, font remoti o altre risorse Internet necessarie durante l'uso.
 
 La chiave di salvataggio è `pocketkanji.prototype.v1`. I dati appartengono all'origine del browser: browser, protocollo, host e porta devono rimanere coerenti per ritrovare automaticamente i progressi.
 

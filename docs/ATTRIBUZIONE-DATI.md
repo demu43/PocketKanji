@@ -21,4 +21,6 @@ I marcatori di priorità di JMdict vengono usati come indizio di frequenza, non 
 
 Le letture contestuali e le mutazioni fonetiche non separabili automaticamente sono mantenute in un piccolo elenco revisionato manualmente. La scheda le segnala con una nota d'uso; per esempio `か` in `三日（みっか）`, `シツ → しっ` in `失敗（しっぱい）` e `ハイ → ぱい` in `一杯（いっぱい）`.
 
+Gli intervalli di evidenziazione presenti nelle schede derivano dagli allineamenti espliciti `ruby`/`rt`. Le segmentazioni di gruppo che non permettono di isolare in modo affidabile un singolo kanji non vengono suddivise artificialmente.
+
 Le fonti complete non sono caricate dall'app durante l'uso: PocketKanji rimane autonomo e incorpora soltanto i campi selezionati necessari alle schede.

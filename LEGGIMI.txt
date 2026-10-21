@@ -10,6 +10,7 @@ Il server accetta connessioni solo da questo computer e si chiude dopo 8 ore di 
 Per riavviarlo, usa nuovamente "Avvia PocketKanji.cmd".
 Se l'avvio fallisce, cerca il file "PocketKanji-errore.txt" in questa cartella.
 Il file HTML contiene tutte le 500 carte. Usa sempre lo stesso browser e indirizzo.
+La cartella assets contiene Noto Sans JP: non rimuoverla, perché serve al kanji principale delle schede.
 
 COSA PUOI PROVARE
 - Oggi: panoramica e ingresso nello studio.

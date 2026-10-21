@@ -141,40 +141,121 @@ def load_jmdict(path: Path) -> dict[tuple[str, str], dict]:
     return result
 
 
-def load_furigana_candidates(path: Path, wanted: set[str], lexical: dict) -> dict[str, list[dict]]:
+def parse_furigana_parts(word: str, reading: str, parts: list[dict]) -> list[dict]:
+    """Return source-backed offsets for each furigana part.
+
+    Offsets are accepted only when the source reconstructs both the spelling and
+    its complete reading exactly. This prevents the UI from guessing a reading
+    segment with substring matching.
+    """
+    parsed = []
+    word_pos = 0
+    reading_pos = 0
+    for part in parts:
+        ruby = part.get("ruby", "")
+        if not ruby:
+            return []
+        spoken = kata_to_hira(part.get("rt") or ruby)
+        parsed.append(
+            {
+                "ruby": ruby,
+                "segment": spoken,
+                "word_span": [word_pos, word_pos + len(ruby)],
+                "reading_span": [reading_pos, reading_pos + len(spoken)],
+                "has_rt": bool(part.get("rt")),
+            }
+        )
+        word_pos += len(ruby)
+        reading_pos += len(spoken)
+    if "".join(part["ruby"] for part in parsed) != word:
+        return []
+    if "".join(part["segment"] for part in parsed) != reading:
+        return []
+    return parsed
+
+
+def load_furigana_candidates(
+    path: Path, wanted: set[str], lexical: dict
+) -> tuple[dict[str, list[dict]], dict[tuple[str, str, str], list[dict]]]:
     with zipfile.ZipFile(path) as archive:
         with archive.open("JmdictFurigana.json") as source:
             entries = json.load(source)
-    index: dict[str, list[dict]] = defaultdict(list)
+    candidate_maps: dict[str, dict[tuple, dict]] = defaultdict(dict)
+    alignments: dict[tuple[str, str, str], list[dict]] = {}
     for entry in entries:
         word = entry.get("text", "")
         reading = kata_to_hira(entry.get("reading", ""))
         meta = lexical.get((word, entry.get("reading", ""))) or lexical.get((word, reading))
         if not meta:
             continue
-        parts = entry.get("furigana") or []
+        parts = parse_furigana_parts(word, reading, entry.get("furigana") or [])
+        if not parts:
+            continue
+        for target in set(word) & wanted:
+            exact = [
+                part for part in parts
+                if part["has_rt"] and part["ruby"] == target and len(part["ruby"]) == 1
+            ]
+            if exact:
+                key = (word, reading, target)
+                if key not in alignments or len(exact) > len(alignments[key]):
+                    alignments[key] = exact
         for pos, part in enumerate(parts):
-            ruby, rt = part.get("ruby", ""), part.get("rt")
-            if not rt or len(ruby) != 1 or ruby not in wanted:
+            ruby = part["ruby"]
+            if not part["has_rt"] or len(ruby) != 1 or ruby not in wanted:
                 continue
             suffix = ""
             next_pos = pos + 1
-            while next_pos < len(parts) and "rt" not in parts[next_pos]:
-                plain = parts[next_pos].get("ruby", "")
+            while next_pos < len(parts) and not parts[next_pos]["has_rt"]:
+                plain = parts[next_pos]["ruby"]
                 if not KANA_RE.fullmatch(plain):
                     break
                 suffix += kata_to_hira(plain)
                 next_pos += 1
-            index[ruby].append(
-                {
-                    "word": word,
-                    "reading": reading,
-                    "segment": kata_to_hira(rt),
-                    "kun_form": kata_to_hira(rt) + suffix,
-                    **meta,
-                }
-            )
-    return index
+            segment = part["segment"]
+            same_reading_parts = [
+                item for item in parts
+                if item["has_rt"] and item["ruby"] == ruby and item["segment"] == segment
+            ]
+            candidate_key = (word, reading, segment, segment + suffix)
+            candidate_maps[ruby][candidate_key] = {
+                "word": word,
+                "reading": reading,
+                "segment": segment,
+                "kun_form": segment + suffix,
+                "word_highlights": [item["word_span"] for item in same_reading_parts],
+                "reading_highlights": [item["reading_span"] for item in same_reading_parts],
+                **meta,
+            }
+    index = {target: list(values.values()) for target, values in candidate_maps.items()}
+    return index, alignments
+
+
+def add_verified_highlights(
+    picked: dict,
+    target: str,
+    display_reading: str,
+    alignments: dict[tuple[str, str, str], list[dict]],
+    allow_verified_variant: bool,
+) -> None:
+    """Attach only source-backed word/reading spans to an example.
+
+    A manually verified or reference-word example may use rendaku, gemination
+    or another sound change. In that case a unique source alignment is accepted.
+    Ambiguous group ruby is never split.
+    """
+    parts = alignments.get((picked["word"], picked["reading"], target), [])
+    if not parts:
+        return
+    expected = kata_to_hira(normalize_reading(display_reading))
+    matches = [part for part in parts if part["segment"] == expected]
+    if not matches and allow_verified_variant:
+        if len(parts) == 1 or len({part["segment"] for part in parts}) == 1:
+            matches = parts
+    if not matches:
+        return
+    picked["word_highlights"] = [part["word_span"] for part in matches]
+    picked["reading_highlights"] = [part["reading_span"] for part in matches]
 
 
 def candidate_score(candidate: dict, target: str, used_words: set[str], preferred_words: set[str]) -> int:
@@ -386,7 +467,12 @@ MANUAL = {
 }
 
 
-def choose_examples(cards: list[dict], lexical: dict, candidates: dict) -> tuple[list[dict], list[dict]]:
+def choose_examples(
+    cards: list[dict],
+    lexical: dict,
+    candidates: dict,
+    alignments: dict[tuple[str, str, str], list[dict]],
+) -> tuple[list[dict], list[dict]]:
     missing = []
     audit = []
     preferred_words = {c["reference_word"] for c in cards}
@@ -451,8 +537,18 @@ def choose_examples(cards: list[dict], lexical: dict, candidates: dict) -> tuple
                             card["kanji"] in N5_CORE_KANJI
                             and is_strong_common(candidate.get("reading_priority", set()))
                         ),
+                        "word_highlights": candidate["word_highlights"],
+                        "reading_highlights": candidate["reading_highlights"],
                     }
                     source = "jmdict"
+                if "word_highlights" not in picked:
+                    add_verified_highlights(
+                        picked,
+                        card["kanji"],
+                        display,
+                        alignments,
+                        allow_verified_variant=source in {"manual", "reference"},
+                    )
                 picked.update({"kind": kind, "reading_kana": display})
                 examples.append(picked)
                 used_words.add(picked["word"])
@@ -462,11 +558,26 @@ def choose_examples(cards: list[dict], lexical: dict, candidates: dict) -> tuple
 
 
 def update_ui(html: str) -> str:
+    font_face = (
+        "@font-face{font-family:'Noto Sans JP';"
+        "src:url('assets/NotoSansJP-Variable.ttf') format('truetype');"
+        "font-style:normal;font-weight:100 900;font-display:block}"
+    )
+    if font_face not in html:
+        html = html.replace("<style>", "<style>" + font_face, 1)
+    old_big_kanji = ".flashcard .big-kanji{font:145px/1.5 'Yu Mincho','Noto Serif CJK JP',serif}"
+    new_big_kanji = ".flashcard .big-kanji{font:400 145px/1.5 'Noto Sans JP',sans-serif}"
+    if old_big_kanji in html:
+        html = html.replace(old_big_kanji, new_big_kanji, 1)
+    elif new_big_kanji not in html:
+        raise SystemExit("Main kanji font rule not found")
+
     old = re.compile(
-        r"(?:function readingExample\(x\)|function readingBlock\(label,readings,kind(?:,examples)?\))\{.*?\nfunction startSession",
+        r"(?:function highlightRanges\(value,ranges\)|function readingExample\(x\)|function readingBlock\(label,readings,kind(?:,examples)?\))\{.*?\nfunction startSession",
         re.S,
     )
-    replacement = r'''function readingExample(x){return `<div class="reading-example"><span class="reading-example-main"><span class="reading-example-word" lang="ja">${esc(x.word)}</span><span class="reading-example-kana" lang="ja">（${esc(x.reading)}）</span></span><span class="reading-example-meaning" lang="en">${esc(x.meaning_en)}</span>${x.advanced?'<span class="reading-level">Advanced</span>':''}${x.usage_note?`<span class="reading-usage-note">${esc(x.usage_note)}</span>`:''}</div>`;}
+    replacement = r'''function highlightRanges(value,ranges){if(!Array.isArray(ranges)||!ranges.length)return esc(value);let out='',cursor=0;for(const range of ranges){if(!Array.isArray(range)||range.length!==2)continue;const start=Number(range[0]),end=Number(range[1]);if(!Number.isInteger(start)||!Number.isInteger(end)||start<cursor||end<=start||end>value.length)continue;out+=esc(value.slice(cursor,start))+`<span class="reading-focus">${esc(value.slice(start,end))}</span>`;cursor=end;}return out+esc(value.slice(cursor));}
+function readingExample(x){return `<div class="reading-example"><span class="reading-example-main"><span class="reading-example-word" lang="ja">${highlightRanges(x.word,x.word_highlights)}</span><span class="reading-example-kana" lang="ja">（${highlightRanges(x.reading,x.reading_highlights)}）</span></span><span class="reading-example-meaning" lang="en">${esc(x.meaning_en)}</span>${x.advanced?'<span class="reading-level">Advanced</span>':''}${x.usage_note?`<span class="reading-usage-note">${esc(x.usage_note)}</span>`:''}</div>`;}
 function readingBlock(label,readings,kind,examples){return `<section class="reading-block ${kind}" aria-label="${label}"><div class="reading-title">${label}</div>${readings.length?`<div class="reading-list">${readings.map(r=>{const matches=examples.filter(x=>x.kind===kind&&x.reading_kana===r.kana);return `<div class="reading-item"><div class="reading-item-head"><span class="reading-kana" lang="ja">${esc(r.kana)}</span>${data.settings.romaji?`<span class="reading-romaji">${esc(r.romaji)}</span>`:''}</div><div class="reading-linked-examples">${matches.map(readingExample).join('')}</div></div>`}).join('')}</div>`:'<span class="reading-empty">Nessuna lettura essenziale selezionata</span>'}</section>`;}
 function answer(c){const examples=c.reading_examples||[];const referenceCovered=examples.some(x=>x.word===c.reference_word&&x.reading===c.reference_word_reading_kana);return `<h2 class="answer-meaning" lang="en">${esc(c.meaning_en)}</h2><div class="reading-sections">${readingBlock("KUN'YOMI",c.kun_readings||[],'kun',examples)}${readingBlock("ON'YOMI",c.on_readings||[],'on',examples)}</div>${referenceCovered?'':`<div class="word-line"><span class="reference-word-label">Parola di riferimento</span><span lang="ja">${esc(c.reference_word)}</span> · <span lang="ja">${esc(c.reference_word_reading_kana)}</span>${data.settings.romaji?` · ${esc(c.reference_word_romaji)}`:''}<br><span lang="en">${esc(c.reference_word_meaning_en)}</span></div>`}<div class="example"><p class="jp" lang="ja">${esc(c.example_ja)}</p><p class="kana" lang="ja">${esc(c.example_kana)}</p><p class="en" lang="en">${esc(c.example_en)}</p></div>${c.notes_it?`<details><summary>Note</summary><p>${esc(c.notes_it)}</p></details>`:''}`;}
 function startSession'''
@@ -480,7 +591,7 @@ function startSession'''
         ".reading-linked-examples{margin-top:7px;border-top:1px solid var(--line);padding-top:5px}"
         ".reading-example{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:3px 10px;align-items:baseline;padding:5px 0;border-bottom:1px solid #e2e8f0;font-size:12px}"
         ".reading-example:last-child{border-bottom:0}.reading-example-main{white-space:nowrap}"
-        ".reading-example-word{font-size:16px}.reading-example-kana{font-size:12px;color:var(--muted)}"
+        ".reading-example-word{font-size:16px}.reading-example-kana{font-size:12px;color:var(--muted)}.reading-focus{color:var(--orange);font-weight:700}"
         ".reading-example-meaning{color:var(--ink);min-width:0}.reading-level{grid-column:2;justify-self:start;font-size:9px;letter-spacing:.5px;color:#8d5038;background:#f5e9e3;border-radius:10px;padding:2px 6px}"
         ".reading-usage-note{grid-column:1/-1;color:var(--muted);font-size:10px}"
     )
@@ -494,6 +605,12 @@ function startSession'''
     )
     if ".reading-linked-examples{" not in html:
         html = html.replace("@media(min-width:1500px)", css + "@media(min-width:1500px)", 1)
+    elif ".reading-focus{" not in html:
+        html = html.replace(
+            ".reading-example-word{font-size:16px}.reading-example-kana{font-size:12px;color:var(--muted)}",
+            ".reading-example-word{font-size:16px}.reading-example-kana{font-size:12px;color:var(--muted)}.reading-focus{color:var(--orange);font-weight:700}",
+            1,
+        )
     return html
 
 
@@ -512,8 +629,10 @@ def main() -> None:
         raise SystemExit("Embedded library not found")
     cards = json.loads(match.group(2))
     lexical = load_jmdict(args.jmdict)
-    candidates = load_furigana_candidates(args.furigana, {c["kanji"] for c in cards}, lexical)
-    missing, audit = choose_examples(cards, lexical, candidates)
+    candidates, alignments = load_furigana_candidates(
+        args.furigana, {c["kanji"] for c in cards}, lexical
+    )
+    missing, audit = choose_examples(cards, lexical, candidates, alignments)
     if args.audit:
         args.audit.write_text(json.dumps(audit, ensure_ascii=False, indent=2), encoding="utf-8")
 
@@ -522,6 +641,7 @@ def main() -> None:
         "displayed_readings": sum(len(c.get("kun_readings", [])) + len(c.get("on_readings", [])) for c in cards),
         "examples": sum(len(c.get("reading_examples", [])) for c in cards),
         "advanced": sum(x["advanced"] for x in audit),
+        "highlighted": sum(bool(x.get("word_highlights")) for x in audit),
         "missing": missing,
     }
     print(json.dumps(summary, ensure_ascii=False, indent=2))

@@ -8,3 +8,4 @@
 *.vbs text eol=crlf
 *.url text eol=crlf
 LEGGIMI.txt text eol=crlf
+*.ttf binary

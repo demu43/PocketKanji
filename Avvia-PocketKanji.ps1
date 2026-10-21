@@ -1,10 +1,12 @@
 param([switch]$NoBrowser)
 $ErrorActionPreference = 'Stop'
 $appFile = Join-Path $PSScriptRoot 'PocketKanji.html'
+$fontFile = Join-Path $PSScriptRoot 'assets\NotoSansJP-Variable.ttf'
 $listener = $null
 $baseUrl = $null
 try {
     if (-not (Test-Path -LiteralPath $appFile)) { throw 'PocketKanji.html non trovato nella cartella del programma.' }
+    if (-not (Test-Path -LiteralPath $fontFile)) { throw 'Il font Noto Sans JP non è presente nella cartella assets.' }
     foreach ($port in 8765..8775) {
         $candidate = "http://127.0.0.1:$port/"
         try {
@@ -54,6 +56,9 @@ try {
             if ($path -eq '/' -or $path -eq '/PocketKanji.html') {
                 $payload = [System.IO.File]::ReadAllBytes($appFile)
                 $contentType = 'text/html; charset=utf-8'
+            } elseif ($path -eq '/assets/NotoSansJP-Variable.ttf') {
+                $payload = [System.IO.File]::ReadAllBytes($fontFile)
+                $contentType = 'font/ttf'
             } elseif ($path -eq '/__pocketkanji') {
                 $payload = [System.Text.Encoding]::UTF8.GetBytes('PocketKanji:v0.1')
             } else {
