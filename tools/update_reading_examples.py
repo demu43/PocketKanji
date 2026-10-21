@@ -618,19 +618,19 @@ function startSession'''
         ".reading-list{display:grid;gap:8px}.reading-item{min-width:0;text-align:left;padding:10px 11px}"
         ".reading-item-head{display:flex;align-items:baseline;gap:9px}.reading-romaji{margin-left:0}"
         ".reading-linked-examples{margin-top:7px;border-top:1px solid var(--line);padding-top:5px}"
-        ".reading-example{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:3px 10px;align-items:baseline;padding:5px 0;border-bottom:1px solid #e2e8f0;font-size:12px}"
-        ".reading-example:last-child{border-bottom:0}.reading-example-main{white-space:nowrap}"
-        ".reading-example-word{font-size:16px}.reading-example-kana{font-size:12px;color:var(--muted)}.reading-focus{color:var(--orange);font-weight:700}"
-        ".reading-example-meaning{color:var(--ink);min-width:0}.reading-level{grid-column:2;justify-self:start;font-size:9px;letter-spacing:.5px;color:#8d5038;background:#f5e9e3;border-radius:10px;padding:2px 6px}"
+        ".reading-example{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:3px 10px;align-items:baseline;padding:5px 0;border-bottom:1px solid #e2e8f0;font-size:12px;min-width:0}"
+        ".reading-example:last-child{border-bottom:0}.reading-example-main{white-space:normal;min-width:0}.reading-example-main>span{min-width:0;overflow-wrap:anywhere}"
+        ".reading-example-word{font-size:16px}.reading-example-kana{font-size:12px;color:var(--muted);overflow-wrap:anywhere}.reading-focus{color:var(--orange);font-weight:700}"
+        ".reading-example-meaning{color:var(--ink);min-width:0;overflow-wrap:anywhere}.reading-level{grid-column:2;justify-self:start;font-size:9px;letter-spacing:.5px;color:#8d5038;background:#f5e9e3;border-radius:10px;padding:2px 6px}"
         ".reading-usage-note{grid-column:1/-1;color:var(--muted);font-size:10px}"
     )
     html = html.replace(
         ".reading-example{display:grid;grid-template-columns:minmax(0,auto) 1fr auto;gap:3px 8px;align-items:baseline;padding:5px 0;border-bottom:1px solid #e2e8f0;font-size:12px}",
-        ".reading-example{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:3px 10px;align-items:baseline;padding:5px 0;border-bottom:1px solid #e2e8f0;font-size:12px}",
+        ".reading-example{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:3px 10px;align-items:baseline;padding:5px 0;border-bottom:1px solid #e2e8f0;font-size:12px;min-width:0}",
     )
     html = html.replace(
         ".reading-example-meaning{color:var(--ink)}.reading-level{font-size:9px;letter-spacing:.5px;color:#8d5038;background:#f5e9e3;border-radius:10px;padding:2px 6px}",
-        ".reading-example-meaning{color:var(--ink);min-width:0}.reading-level{grid-column:2;justify-self:start;font-size:9px;letter-spacing:.5px;color:#8d5038;background:#f5e9e3;border-radius:10px;padding:2px 6px}",
+        ".reading-example-meaning{color:var(--ink);min-width:0;overflow-wrap:anywhere}.reading-level{grid-column:2;justify-self:start;font-size:9px;letter-spacing:.5px;color:#8d5038;background:#f5e9e3;border-radius:10px;padding:2px 6px}",
     )
     if ".reading-linked-examples{" not in html:
         html = html.replace("@media(min-width:1500px)", css + "@media(min-width:1500px)", 1)
