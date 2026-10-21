@@ -571,6 +571,12 @@ def update_ui(html: str) -> str:
         html = html.replace(old_big_kanji, new_big_kanji, 1)
     elif new_big_kanji not in html:
         raise SystemExit("Main kanji font rule not found")
+    old_library_kanji = ".tile .character{font:48px/1.6 'Yu Mincho',serif;display:block;text-align:center}"
+    new_library_kanji = ".tile .character{font:400 48px/1.6 'Noto Sans JP',sans-serif;display:block;text-align:center}"
+    if old_library_kanji in html:
+        html = html.replace(old_library_kanji, new_library_kanji, 1)
+    elif new_library_kanji not in html:
+        raise SystemExit("Library kanji font rule not found")
 
     old = re.compile(
         r"(?:function highlightRanges\(value,ranges\)|function readingExample\(x\)|function readingBlock\(label,readings,kind(?:,examples)?\))\{.*?\nfunction startSession",

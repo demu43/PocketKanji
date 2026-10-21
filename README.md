@@ -12,7 +12,7 @@ L'applicazione è autonoma: HTML, CSS, JavaScript e dati delle carte sono incorp
 - Un vocabolo d'esempio verificato per ogni lettura mostrata, con lettura completa in hiragana e traduzione inglese.
 - Evidenziazione del kanji studiato e del segmento fonetico corrispondente mediante intervalli verificati, senza ricerca testuale approssimativa.
 - Indicazioni discrete per vocaboli avanzati e per mutazioni fonetiche o letture contestuali.
-- Kanji principale delle flashcard reso con il font giapponese Noto Sans JP incluso localmente.
+- Kanji principali delle flashcard e della Libreria resi con il font giapponese Noto Sans JP incluso localmente.
 - Layout delle letture affiancato su desktop e impilato su mobile.
 - Sessioni da 10 carte nuove e fino a 20 ripassi dovuti.
 - Progressi, cronologia e impostazioni salvati nel browser.

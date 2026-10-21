@@ -126,6 +126,7 @@ assert FONT_PATH.exists() and FONT_PATH.stat().st_size > 1_000_000, "Font Noto S
 assert FONT_PATH.read_bytes()[:4] == b"\x00\x01\x00\x00", "File font TrueType non valido"
 assert "@font-face{font-family:'Noto Sans JP';src:url('assets/NotoSansJP-Variable.ttf')" in html
 assert ".flashcard .big-kanji{font:400 145px/1.5 'Noto Sans JP',sans-serif}" in html
+assert ".tile .character{font:400 48px/1.6 'Noto Sans JP',sans-serif;display:block;text-align:center}" in html
 assert '<div class="big-kanji" lang="ja">${esc(c.kanji)}</div>' in html
 assert html.count("@font-face{font-family:'Noto Sans JP'") == 1
 windows_launcher = WINDOWS_LAUNCHER_PATH.read_text(encoding="utf-8")
@@ -152,7 +153,7 @@ print(
             "highlighted_examples": highlighted_count,
             "unhighlighted_ambiguous_examples": example_count - highlighted_count,
             "sentence_length_max": max(sentence_lengths),
-            "main_kanji_font": "Noto Sans JP (bundled)",
+            "kanji_font": "Noto Sans JP (flashcards and library)",
             "ids": "pk0001-pk0500",
             "day_card": "ok",
             "backup_compatibility": "ok",

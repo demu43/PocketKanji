@@ -30,4 +30,4 @@ Quando la fonte fornisce soltanto un ruby di gruppo e non permette di attribuire
 
 ## Font del kanji principale
 
-Il carattere grande della flashcard usa il file locale `assets/NotoSansJP-Variable.ttf`. Dimensione, colore, interlinea e posizione rimangono invariati. Il font è incluso nel progetto per evitare differenze fra i sistemi operativi e non viene caricato da servizi esterni.
+Il carattere grande della flashcard e i kanji nelle tessere della Libreria usano il file locale `assets/NotoSansJP-Variable.ttf`. Dimensioni, colori, interlinea e posizioni rimangono invariati. Il font è incluso nel progetto per evitare differenze fra i sistemi operativi e non viene caricato da servizi esterni.
