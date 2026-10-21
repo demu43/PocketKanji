@@ -30,6 +30,7 @@ example_reading_pattern = re.compile(r"^[\u3040-\u309fー]+$")
 example_count = 0
 advanced_count = 0
 highlighted_count = 0
+sentence_highlighted_count = 0
 sentence_lengths = []
 
 
@@ -48,6 +49,14 @@ for card in cards:
     assert not re.search(r"[\u3400-\u4dbf\u4e00-\u9fff]", card["example_kana"]), f"Kanji nella lettura della frase: {card['id']}"
     assert card["example_ja"].endswith(("。", "！", "？")), f"Punteggiatura frase: {card['id']}"
     sentence_lengths.append(len(card["example_ja"]))
+    has_sentence_highlights = "sentence_word_highlights" in card
+    assert has_sentence_highlights == ("sentence_reading_highlights" in card), f"Evidenziazione frase parziale: {card['id']}"
+    if has_sentence_highlights:
+        validate_spans(card["example_ja"], card["sentence_word_highlights"], f"{card['id']} frase")
+        validate_spans(card["example_kana"], card["sentence_reading_highlights"], f"{card['id']} lettura frase")
+        assert len(card["sentence_word_highlights"]) == len(card["sentence_reading_highlights"]), f"Coppie frase non allineate: {card['id']}"
+        assert all(card["example_ja"][start:end] == card["kanji"] for start, end in card["sentence_word_highlights"]), f"Kanji frase errato: {card['id']}"
+        sentence_highlighted_count += 1
     assert isinstance(card.get("kun_readings"), list), f"kun_readings assente: {card['id']}"
     assert isinstance(card.get("on_readings"), list), f"on_readings assente: {card['id']}"
     assert card["kun_readings"] or card["on_readings"], f"Carta senza letture: {card['id']}"
@@ -154,6 +163,8 @@ assert "function readingExample" in html
 assert "function highlightRanges" in html
 assert "highlightRanges(x.word,x.word_highlights)" in html
 assert "highlightRanges(x.reading,x.reading_highlights)" in html
+assert "highlightRanges(c.example_ja,c.sentence_word_highlights)" in html
+assert "highlightRanges(c.example_kana,c.sentence_reading_highlights)" in html
 assert ".reading-focus{color:var(--orange);font-weight:700}" in html
 assert ".reading-linked-examples{" in html
 assert "grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)" in html
@@ -213,6 +224,7 @@ print(
             "reading_examples": example_count,
             "advanced_examples": advanced_count,
             "highlighted_examples": highlighted_count,
+            "highlighted_sentences": sentence_highlighted_count,
             "unhighlighted_ambiguous_examples": example_count - highlighted_count,
             "sentence_length_max": max(sentence_lengths),
             "kanji_font": "Noto Sans JP (flashcards and library)",
