@@ -26,6 +26,8 @@ Ogni lettura mostrata possiede ora un vocabolo associato. La lettura completa de
 
 Negli esempi il kanji studiato e la parte corrispondente della lettura completa sono evidenziati con il colore secondario già presente nell'interfaccia. Gli intervalli sono ricavati dall'allineamento per carattere di JmdictFurigana e salvati nei dati della scheda; il browser non cerca la lettura come semplice sottostringa.
 
+Per le letture kun con okurigana, la scheda mostra soltanto la porzione letta dal kanji: per esempio `一` mostra `ひと`, mentre l'esempio conserva la parola completa `一つ（ひとつ）`. Il confine deriva dal punto presente nei dati KANJIDIC (`ひと.つ`) e non da una ricerca testuale nel vocabolo.
+
 Quando la fonte fornisce soltanto un ruby di gruppo e non permette di attribuire con sicurezza una porzione della pronuncia a un singolo carattere, l'evidenziazione viene omessa. Rendaku, geminazione, contatori e letture contestuali sono evidenziati soltanto quando l'allineamento è esplicito o l'esempio è stato verificato manualmente.
 
 ## Font del kanji principale
