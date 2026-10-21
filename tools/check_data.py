@@ -158,6 +158,9 @@ assert ".reading-focus{color:var(--orange);font-weight:700}" in html
 assert ".reading-linked-examples{" in html
 assert "@media(max-width:720px){.reading-sections{grid-template-columns:1fr}" in html
 assert all(f'data-rate="{rating}"' in html for rating in ("again", "hard", "good"))
+assert "function navigateLibraryCard(step)" in html
+assert "e.key==='ArrowLeft'||e.key==='ArrowRight'" in html
+assert "if(!d.open)d.showModal()" in html
 
 print(
     json.dumps(
