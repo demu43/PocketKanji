@@ -164,7 +164,14 @@ assert "if(!d.open)d.showModal()" in html
 assert "function speakJapanese(text,button)" in html
 assert "const speechAvailable=()=>window.speechSynthesis" in html
 assert "utterance.lang='ja-JP'" in html
-assert "utterance.rate=.82" in html
+assert "utterance.rate=.9" in html
+assert "utterance.pitch=1.05" in html
+assert "function selectedJapaneseVoice()" in html
+assert "function populateVoiceSelect()" in html
+assert "Automatica · consigliata" in html
+assert "non userò una voce di un’altra lingua" in html
+assert "data.settings.voiceURI" in html
+assert "Prova la voce" in html
 assert "kind==='on'?kataToHira(r.kana):r.kana" in html
 assert "speakButton(x.reading,`Ascolta ${x.reading}`)" in html
 assert "speakButton(c.example_kana,'Ascolta la frase')" in html
