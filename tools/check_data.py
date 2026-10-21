@@ -187,6 +187,10 @@ assert "const MUST_N5_CHARS=" in html
 assert "function renderMustN5()" in html
 assert "['mustn5','MUST N5']" in html
 assert "page==='mustn5'?renderMustN5()" in html
+assert 'data-scope="mustn5"' in html
+assert "function startSession(scope='all')" in html
+assert "scope==='mustn5'?CARDS.filter" in html
+assert "startSession(b.dataset.scope||'all')" in html
 assert "kind==='on'?kataToHira(r.kana):r.kana" in html
 assert "speakButton(x.reading,`Ascolta ${x.reading}`)" in html
 assert "speakButton(c.example_ja,'Ascolta la frase')" in html
