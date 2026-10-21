@@ -204,7 +204,7 @@ html = (
 css = (
     ".reading-sections{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0}"
     ".reading-block{border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:#f8fafc;text-align:left}"
-    ".reading-block.kun{border-top:3px solid #bc6547}.reading-block.on{border-top:3px solid #426d9c}"
+    ".reading-block.kun{border-top:3px solid #2f7f78}.reading-block.on{border-top:3px solid #426d9c}"
     ".reading-title{font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--muted);margin-bottom:10px}"
     ".reading-list{display:flex;flex-wrap:wrap;gap:8px}.reading-item{min-width:72px;background:var(--white);border:1px solid var(--line);border-radius:7px;padding:8px 10px;text-align:center}"
     ".reading-kana{display:block;font-size:23px;line-height:1.25}.reading-romaji{display:block;margin-top:3px;font-size:12px;color:var(--muted);font-style:italic}"
