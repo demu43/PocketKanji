@@ -147,6 +147,16 @@ food_kun = next(item for item in food["reading_examples"] if item["kind"] == "ku
 assert (food_kun["word"], food_kun["reading"], food_kun["reading_kana"]) == ("食べる", "たべる", "た")
 
 assert "pocketkanji.prototype.v1" in html
+assert "lastBackup:null,profile:null" in html
+assert "function cleanProfile(p)" in html
+assert "clean.profile=cleanProfile(v.profile)" in html
+assert "function renderProfile()" in html
+assert "page==='profile'?renderProfile()" in html
+assert '<div class="account" id="account"></div>' in html
+assert "profile:pendingImport.profile||data.profile" in html
+assert '<dialog id="welcome-dialog"' in html
+assert "function maybePromptProfile()" in html
+assert "GOAL_STEPS=[1,25,50,75,100]" in html
 assert FONT_PATH.exists() and FONT_PATH.stat().st_size > 1_000_000, "Font Noto Sans JP assente o incompleto"
 assert FONT_PATH.read_bytes()[:4] == b"\x00\x01\x00\x00", "File font TrueType non valido"
 assert "@font-face{font-family:'Noto Sans JP';src:url('assets/NotoSansJP-Variable.ttf')" in html

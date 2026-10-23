@@ -24,3 +24,10 @@ Le letture contestuali e le mutazioni fonetiche non separabili automaticamente s
 Gli intervalli di evidenziazione presenti nelle schede derivano dagli allineamenti espliciti `ruby`/`rt`. Le segmentazioni di gruppo che non permettono di isolare in modo affidabile un singolo kanji non vengono suddivise artificialmente.
 
 Le fonti complete non sono caricate dall'app durante l'uso: PocketKanji rimane autonomo e incorpora soltanto i campi selezionati necessari alle schede.
+
+## Icone
+
+Le icone dell'interfaccia usano **Material Symbols Rounded** di Google, incluso come font locale in `assets/MaterialSymbolsRounded.woff2`.
+
+- Progetto: <https://github.com/google/material-design-icons>
+- Licenza: Apache License 2.0 (testo completo in `assets/LICENSE-MaterialSymbols.txt`)

@@ -16,6 +16,7 @@ L'applicazione è autonoma: HTML, CSS, JavaScript e dati delle carte sono incorp
 - Kanji principali delle flashcard e della Libreria resi con il font giapponese Noto Sans JP incluso localmente.
 - Layout delle letture affiancato su desktop e impilato su mobile.
 - Sessioni da 10 carte nuove e fino a 20 ripassi dovuti.
+- Profilo locale facoltativo con nome, avatar kanji e obiettivo giornaliero, mostrato in fondo alla barra laterale.
 - Progressi, cronologia e impostazioni salvati nel browser.
 - Backup JSON ed esportazioni CSV.
 - Compatibilità con i backup creati prima dell'aggiunta delle letture Kun/On.
@@ -56,7 +57,11 @@ Per ritrovarli automaticamente usa sempre:
 - la stessa porta, normalmente 8765;
 - una finestra non privata.
 
-Prima di cambiare computer o aggiornare i file, apri **Progressi → Esporta backup**. Sul computer di destinazione usa **Progressi → Importa backup**.
+Il profilo (nome, avatar kanji, obiettivo giornaliero e data di inizio) è un campo facoltativo `profile` dello stesso salvataggio: non è un account online e non lascia il computer. I backup senza profilo restano importabili e, in quel caso, il profilo attuale viene mantenuto.
+
+Prima di cambiare computer o aggiornare i file, apri **Profilo e dati → Esporta backup** (in fondo alla barra laterale). Sul computer di destinazione usa **Profilo e dati → Importa backup**.
+
+Nella stessa pagina puoi chiedere al browser di proteggere l'archivio dalla cancellazione automatica e, con **Esci ed elimina i dati**, rimuovere profilo e progressi da questo browser. Le modifiche fatte in un'altra scheda aperta vengono riprese automaticamente.
 
 ## Aggiornamento di un'installazione esistente
 

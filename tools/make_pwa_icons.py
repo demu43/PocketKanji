@@ -16,10 +16,9 @@ def png_chunk(kind, payload):
 def make_icon(size):
     navy = (25, 59, 101)
     cream = (247, 245, 239)
-    rose = (168, 79, 104)
     pixels = [[navy for _ in range(size)] for _ in range(size)]
 
-    margin = round(size * 0.12)
+    margin = round(size * 0.05)
     radius = round(size * 0.16)
     for y in range(margin, size - margin):
         for x in range(margin, size - margin):
@@ -28,14 +27,12 @@ def make_icon(size):
             if dx * dx + dy * dy <= radius * radius:
                 pixels[y][x] = cream
 
-    cx, cy, dot = round(size * 0.76), round(size * 0.24), round(size * 0.065)
-    for y in range(cy - dot, cy + dot + 1):
-        for x in range(cx - dot, cx + dot + 1):
-            if (x - cx) ** 2 + (y - cy) ** 2 <= dot ** 2:
-                pixels[y][x] = rose
+    glyph_scale = 0.8
 
     def bar(x1, y1, x2, y2, thickness=0.035):
-        t = max(2, round(size * thickness))
+        # Shrink the glyph around the centre to leave more room inside the frame.
+        x1, y1, x2, y2 = (0.5 + (c - 0.5) * glyph_scale for c in (x1, y1, x2, y2))
+        t = max(2, round(size * thickness * glyph_scale))
         for y in range(round(size * y1), round(size * y2) + t):
             for x in range(round(size * x1), round(size * x2) + t):
                 if 0 <= x < size and 0 <= y < size:

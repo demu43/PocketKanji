@@ -10,13 +10,15 @@ Il server accetta connessioni solo da questo computer e si chiude dopo 8 ore di 
 Per riavviarlo, usa nuovamente "Avvia PocketKanji.cmd".
 Se l'avvio fallisce, cerca il file "PocketKanji-errore.txt" in questa cartella.
 Il file HTML contiene tutte le 500 carte. Usa sempre lo stesso browser e indirizzo.
-La cartella assets contiene Noto Sans JP: non rimuoverla, perché serve al kanji principale delle schede.
+La cartella assets contiene Noto Sans JP e Material Symbols: non rimuoverla, perché servono al kanji principale delle schede e alle icone.
 
 COSA PUOI PROVARE
-- Oggi: panoramica e ingresso nello studio.
+- Home: panoramica e ingresso nello studio.
 - Studia: fino a 20 ripassi dovuti oppure 10 carte nuove per sessione.
 - Libreria: ricerca, filtri per stato, 10 gruppi e scheda completa di ogni kanji.
-- Progressi: conteggi, attività, cronologia, esportazione CSV e backup JSON.
+- Progressi: conteggi, attività, cronologia ed esportazione CSV.
+- Profilo e dati (in basso nella barra laterale): nome, avatar kanji, obiettivo
+  giornaliero, backup JSON, voce giapponese ed eliminazione dei dati.
 Aprire una scheda nella libreria non modifica i progressi.
 La tastiera può girare la carta (Spazio/Invio) e valutare la risposta (1/2/3).
 
@@ -33,7 +35,10 @@ La navigazione privata o la cancellazione dei dati del browser può eliminare i 
 Aprire direttamente il file HTML usa un archivio browser diverso da localhost.
 Anche un browser diverso o una porta locale diversa usa un archivio separato.
 Se compare un avviso di salvataggio, esporta il backup prima di chiudere.
-In Progressi trovi "Esporta backup": conserva il file JSON.
+Il profilo e' facoltativo e resta solo in questo browser: non e' un account online.
+In Profilo e dati trovi "Esporta backup": conserva il file JSON.
+"Proteggi i dati" chiede al browser di non cancellare l'archivio quando manca spazio.
+"Esci ed elimina i dati" cancella profilo e progressi da questo browser.
 Per cambiare computer, copia l'intera cartella del programma e importa il backup nell'app.
 L'importazione richiede la medesima libreria e sostituisce i progressi dopo conferma.
 Esporta prima un backup di eventuali progressi da conservare sul computer di arrivo.
